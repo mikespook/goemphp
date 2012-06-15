@@ -1,42 +1,61 @@
 #include "php_embed.h"
-#ifdef ZTS
-    void ***tsrm_ls;
-#endif
-/* Extension bits */
-zend_module_entry goemphp_module_entry = {
-    STANDARD_MODULE_HEADER,
-    "goemphp", /* extension name */
-    NULL, /* function entries */
-    NULL, /* MINIT */
-    NULL, /* MSHUTDOWN */
-    NULL, /* RINIT */
-    NULL, /* RSHUTDOWN */
-    NULL, /* MINFO */
-    "1.0", /* version */
-    STANDARD_MODULE_PROPERTIES
-};
-void php_startup(void) {
-    int argc = 1;
-    char *argv[2] = { "goemphp", NULL };
-    php_embed_init(argc, argv PTSRMLS_CC);
-    zend_startup_module(&goemphp_module_entry);
-}
 
-void php_exec_file(char *filename) {
-    zend_first_try {
-        char *include_script;
-        spprintf(&include_script, 0, "include '%s'", filename);
-        zend_eval_string(include_script, NULL, filename TSRMLS_CC);
-        efree(include_script);
-    } zend_end_try();
+/* {{{ goemphp php_startup(ini)
+*/
+void php_startup(char *ini) {
+    if (php_embed_module.php_ini_path_override) {
+        free(php_embed_module.php_ini_path_override);
+    }
+    php_embed_module.php_ini_path_override = strdup(ini);
+    php_embed_init(0, NULL PTSRMLS_CC);
 }
+/* }}} */
 
-void php_eval_script(char *script) {
+/* {{{ goemphp php_exec_file(filename)
+*/
+char * php_exec_file(char *filename) {
+    char *result = NULL;
     zend_first_try {
-        zend_eval_string(script, NULL, "GoEmPHP" TSRMLS_CC);
+        zend_file_handle file_handle;
+        file_handle.type = ZEND_HANDLE_FILENAME;
+        file_handle.filename = filename;
+        file_handle.free_filename = 0;
+        file_handle.opened_path = NULL;
+        if (php_execute_script( &file_handle TSRMLS_CC ) == FAILURE) {
+            if (PG(last_error_message)) {
+                result = strdup(PG(last_error_message));
+                free(PG(last_error_message));
+                PG(last_error_message) = NULL;
+            }
+        }
     } zend_end_try();
+    return result;
+}
+/* }}} */
+
+char * php_eval_script(char *script) {
+    char *result = NULL;
+    zend_first_try {
+        if ( zend_eval_string(script, NULL, "GoEmPHP" TSRMLS_CC) == FAILURE ) {
+            if (PG(last_error_message)) {
+                result = strdup(PG(last_error_message));
+                free(PG(last_error_message));
+                PG(last_error_message) = NULL;
+            }
+        }
+    } zend_end_try();
+    return result;
 }
 
 void php_shutdown(void) {
     php_embed_shutdown(TSRMLS_CC);
+}
+
+int php_info(void) {
+    if (php_request_startup(TSRMLS_C)==FAILURE) {
+        return FAILURE;
+    }
+    php_print_info(0xFFFFFFFF TSRMLS_CC);
+    php_end_ob_buffers(1 TSRMLS_CC);
+    return SUCCESS;
 }

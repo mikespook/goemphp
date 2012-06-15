@@ -2,6 +2,7 @@ package php
 
 import (
     "os"
+    "io/ioutil"
     "testing"
 )
 
@@ -10,30 +11,43 @@ const(
 )
 
 func TestExec(t *testing.T) {
-    f, err := os.OpenFile(FileName, os.O_CREATE, 0644)
-    if err != nil {
-        t.Errorf("os.OpenFile: %s", err)
+    if err := ioutil.WriteFile(FileName, []byte("<?php echo 'TestExec\n';"), 0644); err != nil {
+        t.Errorf("ioutil.WriteFile: %s", err)
     }
     defer func() {
-        f.Close()
         if err := os.Remove(FileName); err != nil {
             t.Errorf("os.Remove: %s", err)
         }
     }()
-
-    if ret, err := f.WriteString("<?php phpinfo();"); err != nil {
-        t.Errorf("File.WriteString: %s", err)
-    } else {
-        t.Logf("File.WriteString: %d", ret)
+    php := NewPHP("/etc/php5/cli/")
+    defer php.Close()
+    if err := php.Exec(FileName); err != nil {
+        t.Errorf("php.Exec: %s", err)
     }
-
-    php := NewPHP()
-    php.Exec(FileName)
-    php.Close()
 }
 
 func TestEval(t *testing.T) {
-    php := NewPHP()
-    php.Eval("phpinfo();")
-    php.Close()
+    php := NewPHP("/etc/php5/cli/")
+    defer php.Close()
+    if err := php.Eval("echo 'TestEval\n';"); err != nil {
+        t.Errorf("php.Eval: %s", err)
+    }
+}
+
+func TestEvalErr(t *testing.T) {
+    php := NewPHP("/etc/php5/cli/")
+    defer php.Close()
+    if err := php.Eval("echo 'TestEval\n'"); err == nil {
+        t.Errorf("php.Eval should have panic.")
+    } else {
+        t.Logf("php.Eval: ", err)
+    }
+}
+
+func _TestInfo(t *testing.T) {
+    php := NewPHP("/etc/php5/cli/")
+    defer php.Close()
+    if err := php.Info(); err != nil {
+        t.Errorf("php.Info: %s", err)
+    }
 }
