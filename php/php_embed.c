@@ -1,3 +1,7 @@
+// Copyright 2011 Xing Xing <mikespook@gmail.com> All rights reserved.
+// Use of this source code is governed by a MIT
+// license that can be found in the LICENSE file.
+
 #include "sapi/embed/php_embed.h"
 #include <unistd.h>
 
@@ -24,12 +28,19 @@ char * php_eval_script(char *script) {
     char *result = NULL;
     zend_first_try {
         if ( zend_eval_string(script, NULL, "GoEmPHP" TSRMLS_CC) == FAILURE ) {
+            // executed failure, get error message
             if (PG(last_error_message)) {
                 result = strdup(PG(last_error_message));
                 free(PG(last_error_message));
                 PG(last_error_message) = NULL;
             }
         }
+        // trigger_error & throw exception need to handle
+        // if (error) {
+        //
+        // } else if (exception) {
+        //
+        // }
     } zend_end_try();
     return result;
 }
@@ -46,13 +57,18 @@ char * php_exec_file(char *filename) {
         file_handle.free_filename = 0;
         file_handle.opened_path = NULL;
 
-        if (php_execute_script(&file_handle TSRMLS_CC ) == FAILURE) {
-            if (PG(last_error_message)) {
-                result = strdup(PG(last_error_message));
-                free(PG(last_error_message));
-                PG(last_error_message) = NULL;
-            }
+        if ( php_execute_script(&file_handle TSRMLS_CC ) == FAILURE) {
+            // executed failure, get error message
+            // if (error) {
+            //
+            // }
         }
+        // trigger_error & throw exception need to handle
+        // if (error) {
+        //
+        // } else if (exception) {
+        //
+        // } 
     } zend_end_try();
     return result;
 }
