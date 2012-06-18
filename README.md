@@ -11,7 +11,7 @@ It is easy to use:
         log.Fatal(err)
     }
     if err := php.Exec("foobar.php"); err != nil {
-        t.Fatal(err)
+        log.Fatal(err)
     }
 
 For more examples, please read the php\_test.php.
