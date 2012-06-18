@@ -64,7 +64,7 @@ func (php * PHP) Exec(filepath string) (err error) {
         return errors.New(C.GoString(err))
     }
     return
-//    return php.Eval("require('" + filepath + "');")
+    //return php.Eval("require('" + filepath + "');")
 }
 
 func (php * PHP) Eval(script string) (err error) {

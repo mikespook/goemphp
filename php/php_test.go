@@ -21,9 +21,6 @@ var (
 
 func init() {
     php = NewPHP()
-    if f, err := os.OpenFile("/tmp/goemphp.log", os.O_CREATE | os.O_WRONLY, 0644); err == nil {
-        php.Stdout(f)
-    }
     php.Startup()
 }
 
@@ -47,8 +44,7 @@ func TestExec(t *testing.T) {
         t.Errorf("php::file_put_contents: %s", err)
     }
 }
-/*
-// TODO
+
 func TestExecErr(t *testing.T) {
     if err := ioutil.WriteFile(FileName, []byte("<?php echo TestExec"), 0644); err != nil {
         t.Errorf("ioutil.WriteFile: %s", err)
@@ -60,17 +56,12 @@ func TestExecErr(t *testing.T) {
     }()
     if err := php.Exec(FileName); err == nil {
         t.Errorf("php.Exec should have a panic.")
-    } else {
-        t.Logf("php.Exec: %s", err)
     }
 }
-*/
 
 func TestExecNotFound(t *testing.T) {
     if err := php.Exec("not-found.php"); err == nil {
         t.Errorf("php.Exec should have a panic.")
-    } else {
-        t.Logf("php.Exec: %s", err)
     }
 }
 
@@ -79,29 +70,21 @@ func TestEval(t *testing.T) {
         t.Errorf("php.Eval: %s", err)
     }
 }
-/*
-// TODO
+
 func TestEvalThrowExp(t *testing.T) {
     if err := php.Eval("throw new Exception('test exception');"); err == nil {
         t.Errorf("php.Eval should have a panic.")
-    } else {
-        t.Logf("php.Eval: %s", err)
     }
 }
 
 func TestEvalTriggerError(t *testing.T) {
     if err := php.Eval("trigger_error('test error');"); err == nil {
-        t.Errorf("php.Eval should have a panic.")
-    } else {
-        t.Logf("php.Eval: %s", err)
+        t.Errorf("php.Eval should have a panic. %s")
     }
 }
-*/
 
 func TestEvalErr(t *testing.T) {
     if err := php.Eval("echo ;"); err == nil {
         t.Errorf("php.Eval should have a panic.")
-    } else {
-        t.Logf("php.Eval: %s", err)
     }
 }

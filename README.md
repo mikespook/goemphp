@@ -1,5 +1,20 @@
 # GoEmPHP
 
+This package is built for Embedding PHP into Golang.
+
+It is easy to use:
+
+    php = NewPHP()
+    php.Startup()
+    defer php.Close()
+    if err := php.Eval("phpinfo();"); err != nil {
+        log.Fatal(err)
+    }
+    if err := php.Exec("foobar.php"); err != nil {
+        t.Fatal(err)
+    }
+
+For more examples, please read the php\_test.php.
 
 # INSTALL
 
