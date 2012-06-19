@@ -90,6 +90,7 @@ char * php_eval_script(char *script) {
 
         if (!result && EG(exception)) {
             result = exception_error(EG(exception), E_ERROR TSRMLS_CC);
+            EG(exception) = NULL;
         }
         // trigger_error & throw exception need to handle
         // if (error) {
@@ -122,6 +123,7 @@ char * php_exec_file(char *filename) {
         }
         if (!result && EG(exception)) {
             result = exception_error(EG(exception), E_ERROR TSRMLS_CC);
+            EG(exception) = NULL;
         }
         // trigger_error & throw exception need to handle
         // if (error) {
@@ -140,3 +142,45 @@ void php_shutdown(void) {
     php_embed_shutdown(TSRMLS_CC);
 }
 /* }}} */
+
+/* {{{ goemphp php_add_var_bool(char *varname, int value)
+ */
+void php_add_var_bool(char *varname, int value) {
+    zval *newvar;
+    MAKE_STD_ZVAL(newvar);
+    ZVAL_BOOL(newvar, value);
+    zend_hash_update(&EG(symbol_table), varname, strlen(varname) + 1, &newvar, sizeof(zval *), NULL);
+}
+/* }}} */
+
+/* {{{ goemphp php_add_var_long(char *varname, long value)
+ */
+void php_add_var_long(char *varname, int value) {
+    zval *newvar;
+    MAKE_STD_ZVAL(newvar);
+    ZVAL_LONG(newvar, value);
+    zend_hash_update(&EG(symbol_table), varname, strlen(varname) + 1, &newvar, sizeof(zval *), NULL);
+}
+/* }}} */
+
+/* {{{ goemphp php_add_var_double(char *varname, double value)
+ */
+void php_add_var_double(char *varname, double value) {
+    zval *newvar;
+    MAKE_STD_ZVAL(newvar);
+    ZVAL_DOUBLE(newvar, value);
+    zend_hash_update(&EG(symbol_table), varname, strlen(varname) + 1, &newvar, sizeof(zval *), NULL);
+}
+/* }}} */
+
+/* {{{ goemphp php_add_var_str(char *varname, char *value)
+ */
+void php_add_var_str(char *varname, char *value) {
+    zval *newvar;
+    MAKE_STD_ZVAL(newvar);
+    ZVAL_STRING(newvar, value, 1);
+    zend_hash_update(&EG(symbol_table), varname, strlen(varname) + 1, &newvar, sizeof(zval *), NULL);
+}
+/* }}} */
+
+

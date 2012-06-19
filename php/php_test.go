@@ -88,3 +88,37 @@ func TestEvalErr(t *testing.T) {
         t.Errorf("php.Eval should have a panic.")
     }
 }
+
+func TestVar(t *testing.T) {
+    if err := php.Var("v", "test"); err != nil {
+        t.Errorf("TestArgs: %s", err)
+    }
+
+    if err := php.Eval("var_dump($v);"); err != nil {
+        t.Errorf("TestArgs: %s", err)
+    }
+
+    if err := php.Var("v", true); err != nil {
+        t.Errorf("TestArgs: %s", err)
+    }
+
+    if err := php.Eval("var_dump($v);"); err != nil {
+        t.Errorf("TestArgs: %s", err)
+    }
+
+    if err := php.Var("v", 123); err != nil {
+        t.Errorf("TestArgs: %s", err)
+    }
+
+    if err := php.Eval("var_dump($v);"); err != nil {
+        t.Errorf("TestArgs: %s", err)
+    }
+
+    if err := php.Var("v", 123.456); err != nil {
+        t.Errorf("TestArgs: %s", err)
+    }
+
+    if err := php.Eval("var_dump($v);"); err != nil {
+        t.Errorf("TestArgs: %s", err)
+    }
+}
