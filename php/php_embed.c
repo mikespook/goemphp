@@ -198,4 +198,7 @@ void php_array_end(zval *arr, char *varname) {
     zend_hash_update(&EG(symbol_table), varname, strlen(varname) + 1, &arr, sizeof(zval *), NULL);
 }
 
+void php_unset(char *varname) {
+    zend_hash_del(&EG(symbol_table), varname, strlen(varname) + 1);
+}
 

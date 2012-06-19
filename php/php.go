@@ -19,6 +19,7 @@ package php
 // zval * php_array_init();
 // void php_array_add(zval *arr, char *key, char *value);
 // void php_array_end(zval *arr, char *varname);
+// void php_unset(char *varname);
 import "C"
 
 import (
@@ -49,6 +50,10 @@ func NewPHP() (php *PHP) {
         stderr: os.Stderr,
     }
     return
+}
+
+func (php *PHP) Unset(name string) {
+    C.php_unset(C.CString(name))
 }
 
 func (php *PHP) Array(name string, value map[string]string) {

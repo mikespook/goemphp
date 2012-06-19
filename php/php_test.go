@@ -79,7 +79,7 @@ func TestEvalThrowExp(t *testing.T) {
 
 func TestEvalTriggerError(t *testing.T) {
     if err := php.Eval("trigger_error('test error');"); err == nil {
-        t.Errorf("php.Eval should have a panic. %s")
+        t.Errorf("php.Eval should have a panic.")
     }
 }
 
@@ -128,5 +128,13 @@ func TestArray(t *testing.T) {
 
     if err := php.Eval("var_dump($v);"); err != nil {
         t.Errorf("TestArgs: %s", err)
+    }
+}
+
+func TestUnset(t *testing.T) {
+    php.Unset("v")
+
+    if err := php.Eval("var_dump($v);"); err == nil {
+        t.Error("php.Eval should have a panic.")
     }
 }
