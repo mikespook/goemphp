@@ -138,3 +138,31 @@ func TestUnset(t *testing.T) {
         t.Error("php.Eval should have a panic.")
     }
 }
+
+func TestScope(t *testing.T) {
+    if err := php.Eval("$v = 'hello world';"); err != nil {
+        t.Error("TestScope: %s", err)
+    }
+
+    if err := php.Eval("var_dump($v);"); err != nil {
+        t.Error("TestScope: %s", err)
+    }
+}
+
+func TestScopeExec(t *testing.T) {
+    if err := php.Eval("$v = 'hello world';"); err != nil {
+        t.Error("TestScope: %s", err)
+    }
+
+    if err := ioutil.WriteFile(FileName, []byte("<?php echo $v;"), 0644); err != nil {
+        t.Errorf("ioutil.WriteFile: %s", err)
+    }
+    defer func() {
+        if err := os.Remove(FileName); err != nil {
+            t.Errorf("os.Remove: %s", err)
+        }
+    }()
+    if err := php.Exec(FileName); err != nil {
+        t.Errorf("php.Exec: %s", err)
+    }
+}
