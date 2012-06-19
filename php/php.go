@@ -6,6 +6,7 @@ package php
 
 // #cgo CFLAGS: -I/usr/include/php5 -I/usr/include/php5/main -I/usr/include/php5/TSRM -I/usr/include/php5/Zend -I/usr/include/php5/ext -I/usr/include/php5/
 // #cgo LDFLAGS: -lphp5
+// #include "zend.h"
 // void php_set_ini(char *ini);
 // void php_startup();
 // char * php_exec_file(char *filename);
@@ -15,6 +16,9 @@ package php
 // void php_add_var_double(char *varname, double value);
 // void php_add_var_long(char *varname, long value);
 // void php_add_var_bool(char *varname, int value);
+// zval * php_array_init();
+// void php_array_add(zval *arr, char *key, char *value);
+// void php_array_end(zval *arr, char *varname);
 import "C"
 
 import (
@@ -47,6 +51,14 @@ func NewPHP() (php *PHP) {
     return
 }
 
+func (php *PHP) Array(name string, value map[string]string) {
+    z := C.php_array_init()
+    for k, v := range value {
+        C.php_array_add(z, C.CString(k), C.CString(v))
+    }
+    C.php_array_end(z, C.CString(name))
+}
+
 func (php *PHP) Var(name string, value interface{}) (err error) {
     t := reflect.TypeOf(value)
     switch t.Kind() {
@@ -58,7 +70,6 @@ func (php *PHP) Var(name string, value interface{}) (err error) {
             b = 0
         }
         C.php_add_var_bool(C.CString(name), b)
-
     case reflect.Int, reflect.Int16, reflect.Int32, reflect.Int64, reflect.Int8,
         reflect.Uint, reflect.Uint16, reflect.Uint32, reflect.Uint64, reflect.Uint8:
         C.php_add_var_long(C.CString(name), C.long(value.(int)))

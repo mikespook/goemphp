@@ -122,3 +122,11 @@ func TestVar(t *testing.T) {
         t.Errorf("TestArgs: %s", err)
     }
 }
+
+func TestArray(t *testing.T) {
+    php.Array("v", map[string]string{"a":"z", "b":"y", "c":"x"})
+
+    if err := php.Eval("var_dump($v);"); err != nil {
+        t.Errorf("TestArgs: %s", err)
+    }
+}

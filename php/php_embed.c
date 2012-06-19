@@ -183,4 +183,19 @@ void php_add_var_str(char *varname, char *value) {
 }
 /* }}} */
 
+zval * php_array_init() {
+    zval *newvar;
+    MAKE_STD_ZVAL(newvar);
+    array_init(newvar);
+    return newvar;
+}
+
+void php_array_add(zval *arr, char *key, char *value) {
+    add_assoc_string(arr, key, value, 1);
+}
+
+void php_array_end(zval *arr, char *varname) {
+    zend_hash_update(&EG(symbol_table), varname, strlen(varname) + 1, &arr, sizeof(zval *), NULL);
+}
+
 
