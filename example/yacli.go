@@ -3,7 +3,7 @@ package main
 import (
     "log"
     "flag"
-    "bitbucket.org/mikespook/goemphp/php"
+    "github.com/mikespook/goemphp/php"
 )
 
 var (
@@ -17,7 +17,7 @@ func init() {
 }
 
 func main() {
-    p := php.NewPHP()
+    p := php.New()
     p.Startup()
     defer p.Close()
     if *info {
