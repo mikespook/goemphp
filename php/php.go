@@ -44,7 +44,7 @@ type PHP struct {
     inifile string
 }
 
-func NewPHP() (php *PHP) {
+func New() (php *PHP) {
     php = &PHP{
         stdout: os.Stdout,
         stderr: os.Stderr,

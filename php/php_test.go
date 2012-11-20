@@ -20,7 +20,7 @@ var (
 )
 
 func init() {
-    php = NewPHP()
+    php = New()
     php.Startup()
 }
 
