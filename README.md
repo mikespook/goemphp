@@ -14,7 +14,7 @@ It is easy to use:
         log.Fatal(err)
     }
 
-For more examples, please read the souce code: `php\_test.php`.
+For more examples, please read the souce code: `php_test.go`.
 
 # INSTALL
 
