@@ -1,0 +1,5 @@
+package php
+
+// #cgo CFLAGS: -I./php-lib/ -I./php-lib/main -I./php-lib/TSRM -I./php-lib/Zend -I./php-lib/ext
+// #cgo LDFLAGS: -L./php-lib/libs/ -l%PHP.SO%
+import "C"
