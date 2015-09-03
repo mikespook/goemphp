@@ -18,7 +18,7 @@ case $PHP_VER in
   ;;
 esac
 
-sed "s/%PHP.SO%/${PHP_SO}/" php_embed.go.template > php_embed.go
-cp php_embed.c.5 php_embed.c
+sed "s/%PHP.SO%/${PHP_SO}/" php_embed.go.template > php-embed.go
+cp php_embed.c.5 php-embed.c
 
 exit 0
