@@ -21,4 +21,4 @@ _testmain.go
 
 *.exe
 
-php-srcs
+php-*
