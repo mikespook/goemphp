@@ -21,6 +21,15 @@ var (
 
 func init() {
 	php = New()
+	// #TODO issue #8
+	/*
+		devNull, err := os.OpenFile(os.DevNull, os.O_WRONLY, 0644)
+		if err != nil {
+			panic(err)
+		}
+		php.Stdout(devNull)
+		php.Stderr(devNull)
+	*/
 	php.Startup()
 }
 

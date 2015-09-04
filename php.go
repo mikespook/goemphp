@@ -88,6 +88,9 @@ func (php *PHP) IniFile(ini string) {
 }
 
 func (php *PHP) Startup() {
+	// #TODO issue #8
+	// We should not use syscall for this purpose,
+	// it will affect whole app's output.
 	syscall.Dup2(int(php.stdout.Fd()), 1)
 	syscall.Dup2(int(php.stderr.Fd()), 2)
 	C.php_set_ini(C.CString(php.inifile))
