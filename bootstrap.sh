@@ -56,3 +56,5 @@ popd
 echo $PHP_VER > php-version
 unlink php-lib
 ln -s $WORK_DIR/$DIR php-lib
+
+echo "Congratulations!!!"

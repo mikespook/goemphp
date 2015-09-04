@@ -15,6 +15,8 @@ case $PHP_VER in
 *)
 	PHP_SO=php7
 	PHP_C=php_embed.c.7
+	echo "FATAL: Under development" 
+	exit 1
   ;;
 esac
 
