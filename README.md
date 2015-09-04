@@ -21,7 +21,7 @@ For more examples, please read the souce code: `php_test.go`.
 The first step is downloading the package. Please note that you must specify
 the param `-d`.
 
-> $ go get -d github.com/mikespook/goemphp/php
+> $ go get -d github.com/mikespook/goemphp
 
 Then, following step is running `bootstrap.sh` to prepar the embeded PHP 
 library. It has one paramater with 4 values: [5.4 | 5.5 | 5.6 | ng]
