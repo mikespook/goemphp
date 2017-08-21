@@ -4,6 +4,7 @@ This package is built for Embedding PHP into Golang.
 
 It is easy to use:
 
+```go
     script = php.New()
     script.Startup()
     defer script.Close() 
@@ -13,7 +14,7 @@ It is easy to use:
     if err := script.Exec("foobar.php"); err != nil {
         log.Fatal(err)
     }
-
+```
 For more examples, please read the souce code: `php_test.go`.
 
 # INSTALL
